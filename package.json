@@ -1,0 +1,33 @@
+{
+  "name": "iptabler-smart",
+  "version": "1.0.0",
+  "description": "A wrapper for the iptabler module with some useful functionality",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha test/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/justinschw/iptabler-smart.git"
+  },
+  "keywords": [
+    "iptables",
+    "networking",
+    "linux"
+  ],
+  "author": "Justin Schwartzbeck (justinmschw@gmail.com)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/justinschw/iptabler-smart/issues"
+  },
+  "homepage": "https://github.com/justinschw/iptabler-smart#readme",
+  "dependencies": {
+    "iptabler": "0.1.0"
+  },
+  "devDependencies": {
+    "chai": "4.3.4",
+    "mocha": "9.1.1",
+    "mock-require": "3.0.3",
+    "sinon": "11.1.2"
+  }
+}
