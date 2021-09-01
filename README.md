@@ -35,6 +35,26 @@ fw.applyRuleSafely(createMyChain).then(() => {
 
 }).then(() => {
 
+    // For a 'templated' rule, use a string replacement map
+    return fw.applyRuleSafely({
+        sudo: true,
+        table: 'nat',
+        append: 'MYCHAIN2',
+	source: 'GATEWAY_IP',
+	in_interface: 'WAN',
+	jump: 'RETURN'
+    }, false, {
+        GATEWAY_IP: '192.168.1.1',
+	WAN: 'eth0
+    });
+    /*
+     * This rule gets transformed:
+     * GATEWAY_IP => 192.168.1.1
+     * WAN => eth0
+     */
+
+}).then(() => {
+
     let newChainRules = [
         {
             sudo: true,
@@ -71,7 +91,7 @@ fw.applyRuleSafely(createMyChain).then(() => {
 |Method name|Parameters|Function|
 |-----------|----------|--------|
 |getAllRules|None|Fetches existing rules so we know what has been applied|
-|applyRuleSafely|<ul><li>**_rule_** - iptabler rule </li><li> **_updateCurrent_** - call getAllRules before running this rule (default: true)</li></ul>|Apply rule only if it hasn't been applied already|
-|applyRulesSafely|<ul><li>**_rules_** - array of iptabler rules</li></ul>|Calls applyRuleSafely for each rule in the array, only calling getAllRules at the beginning|
-|applyRule|<ul><li>**_rule_** - iptabler rule</li></ul>|Simply execs iptabler rule without checking (unsafe)|
-|applyRules|<ul><li>**_rules_** - array of iptabler rules</li></ul>|calls applyRule on all rules in the array (unsafe)|
+|applyRuleSafely|<ul><li>**_rule_** - iptabler rule </li><li> **_updateCurrent_** - call getAllRules before running this rule (default: true)</li><li>**_replacements_** - optional key:value map of string replacements</li></ul>|Apply rule only if it hasn't been applied already|
+|applyRulesSafely|<ul><li>**_rules_** - array of iptabler rules</li><li>**_replacements_** - optional key:value map of string replacements</li></ul>|Calls applyRuleSafely for each rule in the array, only calling getAllRules at the beginning|
+|applyRule|<ul><li>**_rule_** - iptabler rule</li><li>**_replacements_** - optional key:value map of string replacements</li></ul>|Simply execs iptabler rule without checking (unsafe)|
+|applyRules|<ul><li>**_rules_** - array of iptabler rules</li><li>**_replacements_** - optional key:value map of string replacements</li></ul>|calls applyRule on all rules in the array (unsafe)|

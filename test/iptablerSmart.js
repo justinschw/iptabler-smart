@@ -111,6 +111,24 @@ describe('/lib/iptablerSmart', function() {
                 done();
             })
         });
+
+        it('with replacements', function(done) {
+            const fw = new IptablerSmart();
+            fw.applyRuleSafely({
+                "sudo": true,
+                "append": "ROUTER-FORWARD",
+                "in_interface": "WAN",
+                "out_interface": "LAN",
+                "match": "state",
+                "state": "RELATED,ESTABLISHED",
+                "jump": "ACCEPT"
+            }, true, {
+                'WAN': 'eth0',
+                'LAN': 'eth1'
+            }).then(() => {
+                done();
+            })
+        });
     }); // end applyRuleSafely
 
     describe('applyRulesSafely', function() {
@@ -143,6 +161,37 @@ describe('/lib/iptablerSmart', function() {
                 done();
             })
         });
+
+        it('with replacements', function(done) {
+            const fw = new IptablerSmart();
+            fw.applyRulesSafely([{
+                "sudo": true,
+                "table": "nat",
+                "append": "ROUTER-INGRESS",
+                "source": "GATEWAY_IP",
+                "jump": "RETURN"
+            },{
+                "sudo": true,
+                "append": "ROUTER-FORWARD",
+                "in_interface": "WAN",
+                "out_interface": "LAN",
+                "match": "state",
+                "state": "RELATED,ESTABLISHED",
+                "jump": "ACCEPT"
+            },{
+                "sudo": true,
+                "append": "ROUTER-FORWARD",
+                "in_interface": "LAN",
+                "out_interface": "WAN",
+                "jump": "ACCEPT"
+            }], {
+                'WAN': 'eth0',
+                'LAN': 'eth1',
+                'GATEWAY_IP': '192.168.4.1'
+            }).then(() => {
+                done();
+            })
+        });
     }); // end applyRulesSafely
 
     describe('applyRule', function() {
@@ -166,6 +215,24 @@ describe('/lib/iptablerSmart', function() {
                 append: 'ROUTER-INGRESS',
                 source: '192.168.5.1/32',
                 jump: 'RETURN'
+            }).then(() => {
+                done();
+            })
+        });
+
+        it('with replacements', function(done) {
+            const fw = new IptablerSmart();
+            fw.applyRule({
+                "sudo": true,
+                "append": "ROUTER-FORWARD",
+                "in_interface": "WAN",
+                "out_interface": "LAN",
+                "match": "state",
+                "state": "RELATED,ESTABLISHED",
+                "jump": "ACCEPT"
+            }, {
+                'WAN': 'eth0',
+                'LAN': 'eth1'
             }).then(() => {
                 done();
             })
@@ -195,6 +262,37 @@ describe('/lib/iptablerSmart', function() {
                 source: '192.168.5.1/32',
                 jump: 'RETURN'
             }]).then(() => {
+                done();
+            })
+        });
+
+        it('with replacements', function(done) {
+            const fw = new IptablerSmart();
+            fw.applyRules([{
+                "sudo": true,
+                "table": "nat",
+                "append": "ROUTER-INGRESS",
+                "source": "GATEWAY_IP",
+                "jump": "RETURN"
+            },{
+                "sudo": true,
+                "append": "ROUTER-FORWARD",
+                "in_interface": "WAN",
+                "out_interface": "LAN",
+                "match": "state",
+                "state": "RELATED,ESTABLISHED",
+                "jump": "ACCEPT"
+            },{
+                "sudo": true,
+                "append": "ROUTER-FORWARD",
+                "in_interface": "LAN",
+                "out_interface": "WAN",
+                "jump": "ACCEPT"
+            }], {
+                'WAN': 'eth0',
+                'LAN': 'eth1',
+                'GATEWAY_IP': '192.168.4.1'
+            }).then(() => {
                 done();
             })
         });
